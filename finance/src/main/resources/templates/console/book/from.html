@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title" th:text="'账目'+${#strings.isEmpty(book.id)?'添加':'修改'}"></h3>
+                </div>
+                <div class="box-body">
+                    <form class="form-horizontal js-ajax-form" action="/console/book/save" method="post">
+                        <input type="hidden" name="uid" id="uid" th:value="${book.id}" />
+
+                        <div class="form-group">
+                            <label for="summary" class="col-sm-2 control-label">摘要</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="summary" class="form-control" id="summary"  />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="income" class="col-sm-2 control-label">收入</label>
+                            <div class="col-sm-10">
+                                <input type="number" name="income" class="form-control" id="income" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="pay" class="col-sm-2 control-label">支出</label>
+                            <div class="col-sm-10">
+                                <input type="number" name="pay" class="form-control" id="pay" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="over" class="col-sm-2 control-label">余额</label>
+                            <div class="col-sm-10">
+                                <input type="number" name="over" class="form-control" id="over" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="note" class="col-sm-2 control-label">备注</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="note" class="form-control" id="note"  />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default js-ajax-submit">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:include="console/footer"></div>
+</body>
+</html>

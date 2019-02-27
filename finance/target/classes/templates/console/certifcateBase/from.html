@@ -1,0 +1,180 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content-header">
+    <h1>凭证管理</h1>
+</section>
+<section class="content table-content">
+    <div class="box-header with-border"></div>
+
+    <form action="/console/certifcateBase/save" method="post">
+        <input type="hidden" name="number" id="number" width="10px" />
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th >
+                    <h3 class="th-inner " >记账凭证</h3>
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr>
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner " >凭证字
+                        <span >
+                             <select  name="type" id="type" onchange="getMaxNumber()" required="required" >
+                                <option > 请选择</option>
+                                <option   th:each="it:${finEvidenceTypeList}" th:value="${it.typeCode}" th:text="${it.typeName}"></option>
+                            </select>
+                        </span> &nbsp;第
+                        （<span id="maxNumber"></span>） 号
+                    </div>
+
+                </th>
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner "  th:text="${'日期:'+currentdate}"></div>
+                </th>
+            </tr>
+            <tr>
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner ">摘要</div>
+                </th>
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner ">科目</div>
+                </th>
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner ">借方金额</div>
+                </th>
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner ">贷方金额</div>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr data-index="0" >
+                <td style=""><input type="text" name="finCertificateItems[0].summary" required="required" /></td>
+                <td >
+                    <select  name="finCertificateItems[0].debitAccountCode" required="required" >
+                        <option th:value="0">请选择</option>
+                        <option th:each="it:${finAccountCertificates}" th:value="${it.accountCode}" th:text="${it.accountName}"></option>
+                    </select>
+                </td>
+                <td style=""><input type="text"  name="finCertificateItems[0].debitAmount" /></td>
+                <td style=""><input type="text"  name="finCertificateItems[0].loanAmount"/></td>
+            </tr>
+
+            <tr data-index="0" >
+                <td style=""><input type="text" name="finCertificateItems[1].summary"  /></td>
+                <td >
+                    <select  name="finCertificateItems[1].debitAccountCode" >
+                        <option th:value="0">请选择</option>
+                        <option   th:each="it:${finAccountCertificates}" th:value="${it.accountCode}" th:text="${it.accountName}"></option>
+                    </select>
+                </td>
+
+                <td style=""><input type="text"  name="finCertificateItems[1].debitAmount" /></td>
+                <td style=""><input type="text"  name="finCertificateItems[1].loanAmount"/></td>
+            </tr>
+
+            <tr data-index="0" >
+                <td style=""><input type="text" name="finCertificateItems[2].summary" /></td>
+                <td >
+                    <select  name="finCertificateItems[2].debitAccountCode" >
+                        <option th:value="0"> 请选择</option>
+                        <option   th:each="it:${finAccountCertificates}" th:value="${it.accountCode}" th:text="${it.accountName}"></option>
+                    </select>
+                </td>
+
+                <td style=""><input type="text"  name="finCertificateItems[2].debitAmount" /></td>
+                <td style=""><input type="text"  name="finCertificateItems[2].loanAmount"/></td>
+            </tr>
+
+
+
+            <tr data-index="0">
+                <td style=""> 合计</td>
+                <td></td>
+                <td style=""><input id="total_de" type="text" readonly="readonly" /></td>
+                <td style=""><input id="total_la" type="text" readonly="readonly"   /></td>
+            </tr>
+            </tbody>
+
+            <thead>
+            <tr>
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner " th:text="${'记账：'+currentUser}"></div>
+                </th>
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner ">出纳</div>
+                </th>
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner ">复核</div>
+                </th>
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner "  th:text="${'制单：'+currentUser}"></div>
+                </th>
+            </tr>
+            </thead>
+        </table>
+        <div class="col-sm-offset-2 col-sm-10" style="margin-left: 80%;">
+            <button type="submit" class="btn btn-primary js-ajax-submit">保存凭证</button>
+        </div>
+    </form>
+
+</section>
+
+<div th:include="console/footer"></div>
+</body>
+<script type="text/javascript">
+
+    $(function () {
+        $("input[name$='debitAmount']").click(function () {
+                var i=0;
+                $("input[name$='debitAmount']").each(function () {
+                    if(""!=this.value){
+                        i+=eval(this.value);
+                    }
+                })
+                $("#total_de").val(i);
+            }
+        )
+
+        $("input[name$='loanAmount']").click(function () {
+                var i=0;
+                $("input[name$='loanAmount']").each(function () {
+                    if(""!=this.value){
+                        i+=eval(this.value);
+                    }
+
+                })
+                $("#total_la").val(i);
+            }
+        )
+
+
+    });
+
+
+
+    function  getMaxNumber() {
+        var type= $("#type").val();
+        $.ajax({
+            type: 'POST',
+            url: "/console/certifcateBase/getMaxNumber",
+            data: {"type":type},
+            success: function (data) {
+                $("#number").val(data);
+                $("#maxNumber").html(data);
+            },
+            dataType: "json"
+        });
+
+    }
+</script>
+</html>

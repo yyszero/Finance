@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.finance.FinGeneralLedgerMapper">
+
+    <resultMap id="BaseResultMap" type="com.geekcattle.model.finance.FinGeneralLedger" >
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <result column="total_date" property="totalDate" jdbcType="VARCHAR" />
+        <result column="summary" property="summary" jdbcType="VARCHAR" />
+        <result column="debit_account" property="debitAccount" jdbcType="VARCHAR" />
+        <result column="debit_account_code" property="debitAccountCode" jdbcType="VARCHAR" />
+        <result column="debit_total" property="debitTotal" jdbcType="VARCHAR" />
+        <result column="loan_total" property="loanTotal" jdbcType="VARCHAR" />
+        <result column="over" property="over" jdbcType="DOUBLE" />
+    </resultMap>
+    <select id="findBy" resultMap="BaseResultMap" parameterType="com.geekcattle.model.finance.FinGeneralLedger">
+        SELECT
+            t.bookkeeping_time total_date,
+            t2.debit_account_code,
+            t2.debit_account,
+            SUM(t2.debit_amount)debit_total,
+            SUM(t2.loan_amount) loan_total,
+            t2.over  over
+        FROM
+            fin_certificate_base t,
+            fin_certificate_item t2
+        WHERE
+            t.id = t2.certificate_id and t.status = 1
+        GROUP BY
+            t.bookkeeping_time,
+            t2.debit_account_code
+    </select>
+    
+    <select id="findDetail" resultMap="BaseResultMap" parameterType="com.geekcattle.model.finance.FinGeneralLedger">
+        SELECT
+            t.bookkeeping_time total_date,
+            t2.debit_account_code,
+            t2.debit_account,
+            t2.debit_amount debit_total,
+            t2.loan_amount loan_total,
+            t2.over  over
+        FROM
+            fin_certificate_base t,
+            fin_certificate_item t2
+        WHERE
+            t.id = t2.certificate_id and t.status = 1
+    </select>
+
+
+
+    <select id="selectaccountover" resultMap="BaseResultMap" parameterType="com.geekcattle.model.finance.FinGeneralLedger" >
+        SELECT
+            t.bookkeeping_time total_date,
+            t2.debit_account_code,
+            t2.debit_account,
+            SUM(t2.debit_amount)debit_total,
+            SUM(t2.loan_amount) loan_total,
+            t3.overage+(SUM(t2.debit_amount)-SUM(t2.loan_amount)) over
+        FROM
+            fin_certificate_base t,
+            fin_certificate_item t2,
+						fin_account_certificate t3
+        WHERE
+            t.id = t2.certificate_id and t2.debit_account_code = t3.account_code and t.status = 1
+        GROUP BY
+            t2.debit_account_code
+
+
+    </select>
+    
+</mapper>

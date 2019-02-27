@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title" th:text="'患者信息'+${patientInfo.id==null?'添加':'修改'}"></h3>
+                </div>
+                <div class="box-body">
+                    <form class="form-horizontal js-ajax-form" th:action="'/console/patientInfo/'+${action}" method="post">
+                        <input type="hidden" name="id" th:value="${patientInfo.id}" />
+                        <input type="hidden" name="status" th:value="${patientInfo.status}" />
+                        <div class="form-group">
+                            <label for="name" class="col-sm-2 control-label">姓名</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="name" class="form-control" id="name" required="true" th:value="${patientInfo.name}" placeholder="请填写名称" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="age" class="col-sm-2 control-label">年龄</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="age" class="form-control" id="age" required="true" th:value="${patientInfo.age}" placeholder="请填写年龄" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">性别</label>
+                            <div class="col-sm-10">
+                                <select name="sex" class="form-control">
+                                    <option value="1" th:selected="${patientInfo.sex eq 1}">男</option>
+                                    <option value="0" th:selected="${patientInfo.sex eq 0}">女</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="idCard" class="col-sm-2 control-label">身份证号码</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="idCard" class="form-control" id="idCard" required="true" th:value="${patientInfo.idCard}" placeholder="请填写身份证号码" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="telephone" class="col-sm-2 control-label">电话</label>
+                            <div class="col-sm-10">
+                                <input type="tel" name="telephone" class="form-control" id="telephone" required="true" th:value="${patientInfo.telephone}" placeholder="请填写电话" />
+                            </div>
+                        </div>
+                        <!--<div class="form-group">-->
+                            <!--<label for="birthday" class="col-sm-2 control-label">生日</label>-->
+                            <!--<div class="col-sm-10">-->
+                                <!--<input type="date" name="birthday" required="required" readonly="readonly" class="laydate-icon form-control layer-date" id="birthday" th:value="${employee.birthday}" placeholder="请输入日期" />-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <div class="form-group">
+                            <label for="address" class="col-sm-2 control-label">地址</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="address"  class="form-control" id="address" th:value="${patientInfo.address}" placeholder="请填写地址" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                        <label class="col-sm-2 control-label">选择医生</label>
+                        <div class="col-sm-10">
+                        <select name="doctorId"  class="form-control" th:value="${patientInfo.doctorId}" >
+                        <option   th:each=" item,iterStat:${doctors}" th:text="${item.username}"
+                        th:value="${item.uid}" th:selected="(${item.uid} ==${patientInfo.doctorId})"></option>
+                        </select>
+                        </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-primary js-ajax-submit">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:include="console/footer"></div>
+
+<script>
+    //外部js调用
+    laydate({
+        elem: '#birthday', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+        event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+    });
+
+</script>
+
+</body>
+</html>

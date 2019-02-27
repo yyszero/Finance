@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.finance.FinCertificateItemMapper">
+
+    <resultMap id="BaseResultMap" type="com.geekcattle.model.finance.FinCertificateItem" >
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="certificate_id" property="certificateId" jdbcType="INTEGER" />
+        <result column="summary" property="summary" jdbcType="VARCHAR" />
+        <result column="debit_account" property="debitAccount" jdbcType="VARCHAR" />
+        <result column="debit_account_code" property="debitAccountCode" jdbcType="VARCHAR" />
+        <result column="loan_account" property="loanAccount" jdbcType="VARCHAR" />
+        <result column="loan_account_code" property="loanAccountCode" jdbcType="VARCHAR" />
+        <result column="debit_amount" property="debitAmount" jdbcType="DOUBLE" />
+        <result column="loan_amount" property="loanAmount" jdbcType="DOUBLE" />
+        <result column="over" property="over" jdbcType="DOUBLE" />
+    </resultMap>
+    <select id="findByCertificateId" resultMap="BaseResultMap">
+        SELECT  * FROM fin_certificate_item WHERE  certificate_id =#{certificateId}
+
+    </select>
+    <delete id="deleteByCertifcateBaseId">
+
+        DELETE FROM fin_certificate_item  WHERE  certificate_id =#{id}
+    </delete>
+    <update id="updateOver" parameterType="com.geekcattle.model.finance.FinCertificateItem">
+        UPDATE  fin_certificate_item SET  over = #{over} where id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.finance.BookMapper" >
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.finance.Book" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="bookkeeping_time" property="bookkeepingTime" jdbcType="DATE" />
+    <result column="summary" property="summary" jdbcType="VARCHAR" />
+    <result column="income" property="income" jdbcType="DOUBLE" />
+    <result column="pay" property="pay" jdbcType="DOUBLE" />
+    <result column="over" property="over" jdbcType="DOUBLE" />
+    <result column="certificate" property="certificate" jdbcType="VARCHAR" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+  </resultMap>
+</mapper>

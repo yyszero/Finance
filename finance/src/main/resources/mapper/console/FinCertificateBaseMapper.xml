@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.finance.FinCertificateBaseMapper">
+
+    <resultMap id="BaseResultMap" type="com.geekcattle.model.finance.FinCertificateBase" >
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="bookkeeping_time" property="bookkeepingTime" jdbcType="TIMESTAMP" />
+        <result column="cashier" property="cashier" jdbcType="VARCHAR" />
+        <result column="review" property="review" jdbcType="VARCHAR" />
+        <result column="orders" property="orders" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+        <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+        <result column="number" property="number" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+    </resultMap>
+    <update id="review" parameterType="com.geekcattle.model.finance.FinCertificateBase">
+        
+        update fin_certificate_base set review =#{review},status=#{status}  where id =#{id}
+        
+    </update>
+    <select id="getMaxNumber" resultMap="BaseResultMap" parameterType="com.geekcattle.model.finance.FinCertificateBase">
+        SELECT  *  FROM fin_certificate_base
+        <where>
+            1=1
+            <if test="type!=null">
+                and type =#{type}
+            </if>
+
+        </where>
+        order by number desc limit 1
+
+    </select>
+</mapper>

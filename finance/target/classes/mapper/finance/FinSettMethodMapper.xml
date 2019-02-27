@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.finance.FinSettMethodMapper" >
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.finance.FinSettMethod" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="sett_method_name" property="settMethodName" jdbcType="VARCHAR" />
+    <result column="sett_method_code" property="settMethodCode" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, sett_method_name, sett_method_code, create_time, create_user, update_time, update_user
+  </sql>
+
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.geekcattle.model.finance.FinSettMethod" >
+    update fin_sett_method
+    <set >
+      <if test="settMethodName != null" >
+        sett_method_name = #{settMethodName,jdbcType=VARCHAR},
+      </if>
+      <if test="settMethodCode != null" >
+        sett_method_code = #{settMethodCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>

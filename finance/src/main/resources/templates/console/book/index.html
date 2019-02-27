@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content-header">
+    <h1>账目管理</h1>
+    <small>列表管理</small>
+</section>
+<section class="content table-content">
+    <table id="dataGrid"></table>
+</section>
+<div id="toolbar">
+     <a href="/console/book/from" class="btn btn-primary">入账</a>
+</div>
+<div th:include="console/footer"></div>
+</body>
+<script type="text/javascript">
+    $table = $("#dataGrid");
+    $(function () {
+        initDataGrid();
+    });
+    function initDataGrid(){
+        $table.bootstrapTable({
+            height : tableModel.getHeight(),
+            idField : "id",
+            columns : [[
+                {title: "日期", field: "bookkeepingTimeStr" },
+                {title: "摘要", field: "summary"},
+                {title: "收入", field: "income"},
+                {title: "支出", field: "pay"},
+                {title: "余额", field: "over"},
+                {title: "凭证", field: "certificate"},
+                {title: "备注", field: "note"},
+                {title: "操作", field: "operate", align: 'center', events: operateEvents, formatter: operateFormatter}
+            ]],
+            url : '/console/book/list',
+            queryParams: function(params){
+                return params;
+            },
+            responseHandler : function (res) {
+                return {
+                    rows : res.result.pageInfo.list,
+                    total : res.result.pageInfo.total
+                }
+            },
+            search : true,
+            searchOnEnterKey : true,
+            sortName : 'id',
+            sortOrder : 'asc',
+            pagination : true,
+            sidePagination : 'server',
+            pageSize: 20,
+            pageList : [20, 40, 50, 100],
+            toolbar : "#toolbar",
+            showRefresh : true,
+            showToggle : true
+        });
+    }
+
+    function getRole(value,row,index) {
+        if(row.isSystem == 1){
+            return "超级管理（不受角色限制）"
+        }else{
+            return $.map(value,function (v) {
+                return v.roleName;
+            }).join(",");
+        }
+
+    }
+
+    function operateFormatter(value, row, index) {
+            return [
+                '<span  shiro:hasPermission="book:edit"><a href="/console/book/from?id='+row.id+'" >',
+                '<i class="glyphicon glyphicon-edit"></i>修改',
+                '</a></span>  ',
+                '<span  shiro:hasPermission="book:edit"><a class="remove" href="javascript:void(0);">',
+                '<i class="glyphicon glyphicon-remove"></i>删除',
+                '</a></span>'
+            ].join('');
+    }
+
+    window.operateEvents = {
+        'click .remove': function (e, value, row, index) {
+            operaModel.delRow(row.id, '/console/book/delete', 'id');
+        }
+    };
+</script>
+</html>

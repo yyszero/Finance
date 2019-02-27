@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content-header">
+    <h1>凭证管理</h1>
+</section>
+<section class="content table-content">
+    <div class="box-header with-border"></div>
+
+    <form action="/console/certifcateBase/updatereview" method="post">
+        <input type="hidden" name="id" th:value="${certifcateBase.id}" />
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th >
+                    <h3 class="th-inner " >记账凭证</h3>
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr>
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner "  th:text="${'日期:'+certifcateBase.bookkeepingTimeStr}"></div>
+                </th>
+            </tr>
+            <tr>
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner ">摘要</div>
+                </th>
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner ">借方科目</div>
+                </th>
+
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner ">借方金额</div>
+                </th>
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner ">贷方金额</div>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr data-index="0"  th:each=" item,iterStat : ${finCertificateItems}"  >
+                <td style=""><input type="text"  th:value="${item.summary}" /></td>
+                <td >
+                    <select  >
+                        <option th:value="0">请选择</option>
+                        <option  th:selected="${#strings.equals(item.debitAccountCode , it.accountCode)}"  th:each="it:${finAccountCertificates}" th:value="${it.accountCode}" th:text="${it.accountName}"></option>
+                    </select>
+                </td>
+                <td style=""><input type="text"   th:value="${item.debitAmount}"/></td>
+                <td style=""><input type="text"   th:value="${item.loanAmount}"/></td>
+            </tr>
+
+
+            <tr data-index="0">
+                <td style=""> 合计</td>
+                <td></td>
+                <td style=""><input id="total_de" type="text" readonly="readonly" th:value="${total_de}" /></td>
+                <td style=""><input id="total_la" type="text" readonly="readonly" th:value="${total_la}"  /></td>
+            </tr>
+            </tbody>
+
+            <thead>
+            <tr>
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner " th:text="${'记账：'+certifcateBase.orders}"></div>
+                </th>
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner ">出纳</div>
+                </th>
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner ">复核：<span  th:text="${certifcateBase.review}"  ></span></div>
+                </th>
+                <th style="" data-field="wareName" tabindex="0">
+                    <div class="th-inner "  th:text="${'制单：'+certifcateBase.orders}"></div>
+                </th>
+            </tr>
+            </thead>
+        </table>
+        <div class="col-sm-offset-2 col-sm-10" style="margin-left: 80%;">
+            <span th:if=" ${certifcateBase.status} eq 0 ">
+                 <button type="submit" class="btn btn-primary js-ajax-submit">复核</button>
+            </span>
+
+        </div>
+    </form>
+
+</section>
+
+<div th:include="console/footer"></div>
+</body>
+<script type="text/javascript">
+$(function () {
+    $("input[name$='debitAmount']").click(function () {
+            var i=0;
+            $("input[name$='debitAmount']").each(function () {
+                i+=eval(this.value);
+            })
+            $("#total_de").val(i);
+        }
+    )
+
+    $("input[name$='loanAmount']").click(function () {
+            var i=0;
+            $("input[name$='loanAmount']").each(function () {
+                i+=eval(this.value);
+            })
+            $("#total_la").val(i);
+        }
+    )
+});
+
+
+</script>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title" th:text="'部门信息'+${dept.deptId==null?'添加':'修改'}"></h3>
+                </div>
+                <div class="box-body">
+                    <form class="form-horizontal js-ajax-form" action="/console/dept/save" method="post">
+                        <input type="hidden" name="deptId" th:value="${dept.deptId}" />
+                        <div class="form-group">
+                            <label for="deptName" class="col-sm-2 control-label">部门名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="deptName" class="form-control" id="deptName" required="true" th:value="${dept.deptName}" placeholder="请填写部门名称" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-primary js-ajax-submit">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:include="console/footer"></div>
+
+<script>
+    //外部js调用
+    laydate({
+        elem: '#birthday', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+        event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+    });
+
+</script>
+
+</body>
+</html>

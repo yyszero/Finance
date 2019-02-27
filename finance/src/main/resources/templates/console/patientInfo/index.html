@@ -1,0 +1,151 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content-header">
+    <h1>患者管理</h1>
+    <small>列表管理</small>
+</section>
+<section class="content table-content">
+    <table id="dataGrid"></table>
+</section>
+<div id="toolbar">
+   <span shiro:hasPermission="patientInfo:save">
+    <a href="/console/patientInfo/from" class="btn btn-primary" >挂号</a>
+   </span>
+</div>
+<div th:include="console/footer"></div>
+
+
+<script type="text/javascript">
+    $table = $("#dataGrid");
+    $(function () {
+        initDataGrid();
+    });
+    function initDataGrid(){
+        $table.bootstrapTable({
+            height : tableModel.getHeight(),
+            idField : "id",
+            columns: [[
+                {title: "id", field: "id"},
+                {title: "姓名", field: "name"},
+                {title: "性别", field: "sex", formatter : tableModel.getSex},
+                {title: "年龄", field: "age"},
+                {title: "电话", field: "telephone"},
+                {title: "地址", field: "address"},
+                {title: "状态", field: "status", sortable: true,formatter : tableModel.getStatus},
+                // {title: "创建日期", field: "createTime", sortable: true},
+                // {title: "更新日期", field: "updateTime", sortable: true},
+                {title: "操作", field: "operate", align: 'center', events: operateEvents, formatter: operateFormatter}
+            ]],
+            url: '/console/patientInfo/list',
+            queryParams: function(params){
+                return params;
+            },
+            responseHandler : function (res) {
+                return {
+                    rows : res.result.pageInfo.list,
+                    total : res.result.pageInfo.total
+                }
+            },
+            sortName : 'id',
+            sortOrder : 'asc',
+            pagination : true,
+            sidePagination : 'server',
+            pageSize: 20,
+            pageList : [20, 40, 50, 100],
+            toolbar : "#toolbar",
+            showRefresh : true,
+            showToggle : true
+        });
+    }
+
+    function operateFormatter(value, row, index) {
+        return [
+            '<span shiro:hasPermission="patientInfo:edit"><a href="/console/patientInfo/from?id='+row.id+'" >',
+            '<i class="glyphicon glyphicon-edit"></i>修改',
+            '</a></span>  ',
+            '<span shiro:hasPermission="cases:index"><a href="/console/cases/index?patientId='+row.id+'" >',
+            '<i class="glyphicon glyphicon-edit"></i>查看病例',
+            '</a></span>',
+            '<span shiro:hasPermission="patientInfo:into"><a href="javascript:void(0);" onclick="into('+row.id+')" >',
+            '<i class="glyphicon glyphicon-edit"></i>住院',
+            '</a> </span> ',
+            '<span shiro:hasPermission="doctorAdvice:index"><a href="/console/doctorAdvice/index?casesId='+row.id+'" >',
+            '<i class="glyphicon glyphicon-edit"></i>查看医嘱',
+            '</a> </span> ',
+            '<span shiro:hasPermission="patientInfo:out"><a href="javascript:void(0);" onclick="out('+row.id+')">',
+            '<i class="glyphicon glyphicon-edit"></i>出院',
+            '</a></span>  ',
+            '<span shiro:hasPermission="patientInfo:print"><a href="/console/patientInfo/print?id='+row.id+'" >',
+            '<i class="glyphicon glyphicon-edit"></i>病例打印',
+            '</a></span>  ',
+            '<span shiro:hasPermission="patientInfo:delete"><a class="remove" href="javascript:void(0);">',
+            '<i class="glyphicon glyphicon-remove"></i>删除',
+            '</a></span>'
+        ].join('');
+    }
+
+    window.operateEvents = {
+        'click .remove' : function (e, value, row, index) {
+            operaModel.delRow(row.id, '/console/patientInfo/delete', 'id');
+        }
+    };
+
+
+    function into(id) {
+
+        var params ={
+            "id":id,
+            "status":"30"
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: "/console/patientInfo/into",
+            data: params,
+            success: function (data) {
+                if(data.status==1){
+                    alert(data.msg);
+                    window.location.reload();
+                }else{
+                    alert(data.msg);
+                }
+
+            },
+            dataType: "json"
+        });
+
+    }
+
+    function out(id) {
+
+        var params ={
+            "id":id,
+            "status":"40"
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: "/console/patientInfo/out",
+            data: params,
+            success: function (data) {
+                if(data.status==1){
+                    alert(data.msg);
+                    window.location.reload();
+                }else{
+                    alert(data.msg);
+                }
+
+            },
+            dataType: "json"
+        });
+
+    }
+</script>
+</body>
+</html>
+

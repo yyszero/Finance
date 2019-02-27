@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content-header">
+    <h1>凭证管理</h1>
+    <small>列表管理</small>
+</section>
+<section class="content table-content">
+    <table id="dataGrid"></table>
+</section>
+<div id="toolbar">
+    <span  shiro:hasPermission ="certifcateBase:save" >
+            <a href="/console/certifcateBase/from" class="btn btn-primary">添加记账凭证</a>
+    </span>
+
+</div>
+<div th:include="console/footer"></div>
+</body>
+<script type="text/javascript">
+    $table = $("#dataGrid");
+    $(function () {
+        initDataGrid();
+    });
+    function initDataGrid(){
+        $table.bootstrapTable({
+            height : tableModel.getHeight(),
+            idField : "id",
+            columns : [[
+                {title: "凭证类型", field: "type",formatter : tableModel.getType  },
+                {title: "凭证编号", field: "number",formatter : tableModel.getNumberStr  },
+                {title: "记账时间", field: "bookkeepingTimeStr"},
+                {title: "创建人", field: "createUser"},
+                {title: "状态", field: "status",formatter : tableModel.getState},
+                {title: "创建时间", field: "createTimeStr"},
+                {title: "操作", field: "operate", align: 'center', events: operateEvents, formatter: operateFormatter}
+            ]],
+            url : '/console/certifcateBase/list',
+            queryParams: function(params){
+                return params;
+            },
+            responseHandler : function (res) {
+                return {
+                    rows : res.result.pageInfo.list,
+                    total : res.result.pageInfo.total
+                }
+            },
+            search : true,
+            searchOnEnterKey : true,
+            sortName : 'id',
+            sortOrder : 'asc',
+            pagination : true,
+            sidePagination : 'server',
+            pageSize: 20,
+            pageList : [20, 40, 50, 100],
+            toolbar : "#toolbar",
+            showRefresh : true,
+            showToggle : true
+        });
+    }
+
+    function getRole(value,row,index) {
+        if(row.isSystem == 1){
+            return "超级管理（不受角色限制）"
+        }else{
+            return $.map(value,function (v) {
+                return v.roleName;
+            }).join(",");
+        }
+
+    }
+
+    function operateFormatter(value, row, index) {
+            return [
+                '<span  shiro:hasPermission="certifcateBase:edit"><a href="/console/certifcateBase/edit?id='+row.id+'" >',
+                '<i class="glyphicon glyphicon-edit"></i>修改',
+                '</a></span> ',
+                '<span  shiro:hasPermission="certifcateBase:review"><a href="/console/certifcateBase/review?id='+row.id+'" >',
+                '<i class="glyphicon glyphicon-edit"></i><span>复核</span>',
+                '</a></span>',
+                '<span  shiro:hasPermission="certifcateBase:delete"><a class="remove" href="javascript:void(0);">',
+                '<i class="glyphicon glyphicon-remove"></i>删除',
+                '</a></span>'
+            ].join('');
+    }
+
+    window.operateEvents = {
+        'click .remove': function (e, value, row, index) {
+            operaModel.delRow(row.id, '/console/certifcateBase/delete', 'id');
+        }
+    };
+</script>
+</html>

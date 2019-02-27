@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.finance.FinAccountCertificateMapper" >
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.finance.FinAccountCertificate" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="account_name" property="accountName" jdbcType="VARCHAR" />
+    <result column="account_code" property="accountCode" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="overage" property="overage" jdbcType="DOUBLE" />
+    <result column="over_real" property="overReal" jdbcType="DOUBLE" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List" >
+    id, account_name, account_code, create_user, create_time, update_user, update_time,type,overage,over
+  </sql>
+
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.geekcattle.model.finance.FinAccountCertificate" >
+    update fin_account_certificate
+    <set >
+      <if test="accountName != null" >
+        account_name = #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountCode != null" >
+        account_code = #{accountCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+            type = #{type},
+      </if>
+      <if test="overage != null" >
+            overage = #{overage},
+       </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="findById" resultMap="BaseResultMap">
+
+    SELECT * FROM  fin_account_certificate  WHERE  id =#{id}
+
+  </select>
+
+  <select id="findByCode" resultMap="BaseResultMap">
+     SELECT * FROM  fin_account_certificate  WHERE account_code =#{code}
+
+  </select>
+
+  <update id="updateOver" parameterType="com.geekcattle.model.finance.FinAccountCertificate">
+
+    UPDATE  fin_account_certificate SET over_real =#{overReal} where  id=#{id}
+  </update>
+</mapper>

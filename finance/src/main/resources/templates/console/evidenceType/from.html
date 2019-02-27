@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title" th:text="'凭证类型'+${evidenceType.id==null?'添加':'修改'}"></h3>
+                </div>
+                <div class="box-body">
+                    <form class="form-horizontal js-ajax-form" action="/console/evidenceType/save" method="post">
+                        <input type="hidden" name="id" th:value="${evidenceType.id}" />
+                        <div class="form-group">
+                            <label for="typeName" class="col-sm-2 control-label">凭证类型名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="typeName" class="form-control" id="typeName" required="true" th:value="${evidenceType.typeName}" placeholder="请填写凭证类型名称" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="typeCode" class="col-sm-2 control-label">凭证类型编码</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="typeCode" class="form-control" id="typeCode" required="true" th:value="${evidenceType.typeCode}" placeholder="请填写凭证类型编码" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-primary js-ajax-submit">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:include="console/footer"></div>
+
+<script>
+    //外部js调用
+    laydate({
+        elem: '#birthday', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+        event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+    });
+
+</script>
+
+</body>
+</html>

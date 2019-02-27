@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+
+</head>
+<body  id="printArea">
+<section class="content">
+    <div class="row">
+        <div class="">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title" ><span th:text="${patientInfo.name}"></span>的病例信息</h3>
+                </div>
+                <div class="box-body">
+                    <form class="form-horizontal js-ajax-form">
+                        <input type="hidden" name="id" th:value="${patientInfo.id}" />
+                        <input type="hidden" name="status" th:value="${patientInfo.status}" />
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label">姓名</label>
+                            <div class="col-sm-10">
+                                <span th:text="${patientInfo.name}" ></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="age" class="col-sm-2 control-label">年龄</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="age" readonly="readonly" class="form-control" id="age" required="true" th:value="${patientInfo.age}" placeholder="请填写年龄" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">性别</label>
+                            <div class="col-sm-10">
+                                <select name="sex" class="form-control" readonly="readonly" >
+                                    <option value="1" th:selected="${patientInfo.sex eq 1}">男</option>
+                                    <option value="0" th:selected="${patientInfo.sex eq 0}">女</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="idCard" class="col-sm-2 control-label">身份证号码</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly="readonly"  name="idCard" class="form-control" id="idCard" required="true" th:value="${patientInfo.idCard}" placeholder="请填写身份证号码" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="telephone" class="col-sm-2 control-label">电话</label>
+                            <div class="col-sm-10">
+                                <input type="tel" readonly="readonly"  name="telephone" class="form-control" id="telephone" required="true" th:value="${patientInfo.telephone}" placeholder="请填写电话" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="address" class="col-sm-2 control-label">地址</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly="readonly"  name="address"  class="form-control" id="address" th:value="${patientInfo.address}" placeholder="请填写地址" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address" class="col-sm-2 control-label">病例</label>
+                            <div class="col-sm-10">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th style="" data-field="chiefComplaint" tabindex="0">
+                                            <div class="th-inner ">主诉</div>
+                                            <div class="fht-cell" style="width: 20px;" ></div>
+                                        </th>
+                                        <th style="" data-field="note" tabindex="0">
+                                            <div class="th-inner ">描述</div>
+                                            <div class="fht-cell" style="width: 20px;"></div>
+                                        </th>
+                                        <th style="" data-field="createUser" tabindex="0">
+                                            <div class="th-inner ">创建人</div>
+                                            <div class="fht-cell" style="width: 20px;"></div>
+                                        </th>
+                                        <th style="" data-field="createTime" tabindex="0">
+                                            <div class="th-inner sortable both">创建日期</div>
+                                            <div class="fht-cell" style="width: 20px;"></div>
+                                        </th>
+                                    </tr>
+
+                                    <tr th:each="case:${cases}"  style="height: 30px;">
+                                        <td  >
+                                            <textarea readonly="readonly" height="20px" style="margin: 0px; width: 234px; height: 200px;" th:text="${case.chiefComplaint}"></textarea>
+                                        </td>
+                                        <td >
+                                            <textarea readonly="readonly" height="20px" style="margin: 0px; width: 234px; height: 200px;" th:text="${case.note}"></textarea>
+                                        </td>
+                                        <td  th:text="${case.createUser}" ></td>
+                                        <td th:text="${case.createTime}" ></td>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="address" class="col-sm-2 control-label">医嘱</label>
+                            <div class="col-sm-10">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th style="" data-field="chiefComplaint" tabindex="0">
+                                            <div class="th-inner ">医嘱</div>
+                                            <div class="fht-cell" style="width: 20px;" ></div>
+                                        </th>
+                                        <th style="" data-field="note" tabindex="0">
+                                            <div class="th-inner ">文书</div>
+                                            <div class="fht-cell" style="width: 20px;"></div>
+                                        </th>
+                                        <th style="" data-field="createUser" tabindex="0">
+                                            <div class="th-inner ">创建人</div>
+                                            <div class="fht-cell" style="width: 20px;"></div>
+                                        </th>
+                                    </tr>
+
+                                    <tr th:each="adv:${advices}"  style="height: 30px;">
+                                        <td  >
+                                            <textarea readonly="readonly" height="20px" style="margin: 0px; width: 234px; height: 200px;" th:text="${adv.note}"></textarea>
+                                        </td>
+                                        <td >
+                                            <textarea readonly="readonly" height="20px" style="margin: 0px; width: 234px; height: 200px;" th:text="${adv.instruments}"></textarea>
+                                        </td>
+                                        <td th:text="${adv.createUser}" ></td>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div  style="margin-left: 70%;">
+                                <input  type="button" th:value="打印" id="btnPrint" class="btn btn-primary js-ajax-submit"></input>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:include="console/footer"></div>
+<script  src="/static/js/print.js"></script>
+<script>
+
+    $("#btnPrint").click(function(){
+        $.print("#printArea" /*, options*/);
+    });
+</script>
+
+</body>
+</html>

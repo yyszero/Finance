@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>登录</title>
+	<link rel="shortcut icon" type="image/x-icon" href="/static/img/icon/favicon.ico"/>
+	<link rel="stylesheet" type="text/css" href="/static/css/base.css"/>
+	<link rel="stylesheet" type="text/css" href="/static/css/home.css"/>
+	<script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/jquery-validate/1.16.0/jquery.validate.min.js"></script>
+	<script src="https://cdn.bootcss.com/jquery-validate/1.16.0/additional-methods.min.js"></script>
+	<script src="https://cdn.bootcss.com/jquery.form/4.2.1/jquery.form.min.js"></script>
+	<script src="https://cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
+</head>
+<body>
+
+<header id="pc-header">
+	<div class="center" style="height: 100px">
+
+	</div>
+</header>
+<section>
+	<div class="pc-login-bj">
+		<div class="center clearfix">
+			<div class="fl"></div>
+			<div class="fr pc-login-box">
+				<div class="pc-login-title"><h2>用户登录</h2></div>
+				<form  class="ajaxforms"  method="post" action="/member/login" >
+					<div class="pc-sign">
+						<input type="text" name="account"  placeholder="用户名"/>
+					</div>
+					<div class="pc-sign">
+						<input type="password"  name="password"  placeholder="请输入您的密码"/>
+					</div>
+					<div class="pc-submit-ss">
+						<input type="submit"  value="登录" placeholder=""/>
+					</div>
+					<div class="pc-reg">
+						<a href="#">忘记密码</a>
+						<a href="/member/reg" class="red">免费注册</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</section>
+<script type="text/javascript">
+    $(function () {
+        var form = $("form.ajaxforms");
+        var formloading = false;
+        form.validate({
+            showErrors : function(errorMap, errorArr) {
+                try {
+                    $(errorArr[0].element).focus();
+                    layer.msg(errorArr[0].message);
+                } catch (err) {
+                }
+            },
+            rules : {
+                'account' : {
+                    required : true
+                },
+                'password' : {
+                    required : true,
+                }
+            },
+            //验证未通过提示消息
+            messages : {
+                'account' : {
+                    required : '请输入用户名'
+                },
+                'password' : {
+                    required : '请输入密码'
+                },
+            },
+            submitHandler : function(forms) {
+                if (formloading) return;
+                $(forms).ajaxSubmit({
+                    url : form.attr('action'),
+                    dataType : 'json',
+                    beforeSubmit : function(arr, $form, options) {
+                        formloading = true;
+                    },
+                    success : function(data, statusText, xhr, $form) {
+                        formloading = false;
+                        if (data.status == 1) {
+                            window.location.href = '/member/index';
+                        } else {
+                            layer.msg(data.msg);
+                        }
+                    }
+                });
+            }
+        })
+    })(jQuery);
+</script>
+
+</body>
+</html>
